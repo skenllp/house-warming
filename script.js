@@ -226,33 +226,69 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ==========================================
-    // 4. AUDIO CONTROLLER PLAYBACK
+    // 4. AUDIO CONTROLLER PLAYBACK & AUTOPLAY
     // ==========================================
     const audioToggle = document.getElementById('audio-toggle');
     const bgAudio = document.getElementById('bg-audio');
     const audioIcon = document.getElementById('audio-icon');
 
+    function playAudio() {
+        if (bgAudio && bgAudio.paused) {
+            bgAudio.play()
+                .then(() => {
+                    // Update toggle icon to playing state
+                    audioIcon.innerHTML = `
+                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                    `;
+                    audioToggle.setAttribute('title', 'Pause Music');
+                    removeAutoplayListeners();
+                })
+                .catch(err => {
+                    console.log("Autoplay blocked by browser. Awaiting user interaction.", err);
+                });
+        }
+    }
+
+    function pauseAudio() {
+        if (bgAudio && !bgAudio.paused) {
+            bgAudio.pause();
+            audioIcon.innerHTML = `
+                <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM12 4L9.91 6.09 12 8.18V4zm-8.09-.09L2.81 5.09 6.82 9H4v6h4l5 5v-6.83l4.88 4.88c-.62.47-1.31.85-2.08 1.09v2.01c1.3-.3 2.49-.93 3.47-1.76l2.62 2.62 1.41-1.41L4.82 2.81 3.91 3.91zM12 15.17L9.83 13H8v-2h1.83l.26-.26 1.91 1.91v2.52z"/>
+            `;
+            audioToggle.setAttribute('title', 'Play Background Daff');
+        }
+    }
+
+    // Try playing immediately
+    if (bgAudio) {
+        // Attempt autoplay
+        playAudio();
+
+        // Listeners for first user interaction to trigger autoplay
+        const interactionEvents = ['click', 'touchstart', 'scroll', 'keydown'];
+        
+        function handleInteractionAutoplay() {
+            playAudio();
+        }
+
+        interactionEvents.forEach(event => {
+            document.addEventListener(event, handleInteractionAutoplay, { once: true });
+        });
+
+        function removeAutoplayListeners() {
+            interactionEvents.forEach(event => {
+                document.removeEventListener(event, handleInteractionAutoplay);
+            });
+        }
+    }
+
     if (audioToggle && bgAudio && audioIcon) {
-        audioToggle.addEventListener('click', () => {
+        audioToggle.addEventListener('click', (e) => {
+            e.stopPropagation(); // Avoid triggering document click listener
             if (bgAudio.paused) {
-                bgAudio.play()
-                    .then(() => {
-                        // Change icon to playing state
-                        audioIcon.innerHTML = `
-                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-                        `;
-                        audioToggle.setAttribute('title', 'Pause Music');
-                    })
-                    .catch(err => {
-                        console.log("Audio play blocked by browser policies.", err);
-                    });
+                playAudio();
             } else {
-                bgAudio.pause();
-                // Change back to muted/paused icon
-                audioIcon.innerHTML = `
-                    <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM12 4L9.91 6.09 12 8.18V4zm-8.09-.09L2.81 5.09 6.82 9H4v6h4l5 5v-6.83l4.88 4.88c-.62.47-1.31.85-2.08 1.09v2.01c1.3-.3 2.49-.93 3.47-1.76l2.62 2.62 1.41-1.41L4.82 2.81 3.91 3.91zM12 15.17L9.83 13H8v-2h1.83l.26-.26 1.91 1.91v2.52z"/>
-                `;
-                audioToggle.setAttribute('title', 'Play Background Daff');
+                pauseAudio();
             }
         });
     }
