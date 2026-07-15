@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Housewarming Ceremony Invitation of Muhammed Jalib Vaikkileri & Fatima M.C. - Baithul Madina">
+    <title>Housewarming Invitation | Muhammed Jalib & Fatima</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Background Music / Audio (Optional, Muted by default) -->
+    <div class="audio-controller" id="audio-toggle" title="Play/Pause Background Daff">
+        <svg id="audio-icon" viewBox="0 0 24 24">
+            <!-- Muted state default -->
+            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM12 4L9.91 6.09 12 8.18V4zm-8.09-.09L2.81 5.09 6.82 9H4v6h4l5 5v-6.83l4.88 4.88c-.62.47-1.31.85-2.08 1.09v2.01c1.3-.3 2.49-.93 3.47-1.76l2.62 2.62 1.41-1.41L4.82 2.81 3.91 3.91zM12 15.17L9.83 13H8v-2h1.83l.26-.26 1.91 1.91v2.52z"/>
+        </svg>
+        <audio id="bg-audio" loop>
+            <source src="https://assets.mixkit.co/active_storage/sfx/123/123-200.wav" type="audio/wav"> <!-- Simple soft chime/melody placeholder -->
+        </audio>
+    </div>
+
+    <!-- Decorative Top Lanterns -->
+    <div class="lantern-wrapper left">
+        <svg viewBox="0 0 100 200" width="60" height="120" xmlns="http://www.w3.org/2000/svg">
+            <line x1="50" y1="0" x2="50" y2="40" stroke="#d97706" stroke-width="2" />
+            <path d="M50 40 L30 60 L30 110 L50 130 L70 110 L70 60 Z" fill="#ffffff" stroke="#d97706" stroke-width="2" />
+            <polygon points="50,48 38,62 62,62" fill="#fbbf24" opacity="0.8" />
+            <rect x="45" y="65" width="10" height="40" fill="#fbbf24" rx="2" opacity="0.9" />
+            <circle cx="50" cy="85" r="15" fill="#fbbf24" filter="blur(2px)" opacity="0.5" />
+            <path d="M30 85 L70 85" stroke="#d97706" stroke-width="1.5" />
+            <path d="M50 130 L50 160" stroke="#d97706" stroke-width="2" />
+            <circle cx="50" cy="165" r="5" fill="#d97706" />
+        </svg>
+    </div>
+    <div class="lantern-wrapper right">
+        <svg viewBox="0 0 100 200" width="60" height="120" xmlns="http://www.w3.org/2000/svg">
+            <line x1="50" y1="0" x2="50" y2="60" stroke="#d97706" stroke-width="2" />
+            <path d="M50 60 L35 75 L35 125 L50 145 L65 125 L65 75 Z" fill="#ffffff" stroke="#d97706" stroke-width="2" />
+            <polygon points="50,68 41,80 59,80" fill="#fbbf24" opacity="0.8" />
+            <rect x="46" y="85" width="8" height="35" fill="#fbbf24" rx="2" opacity="0.9" />
+            <circle cx="50" cy="100" r="12" fill="#fbbf24" filter="blur(2px)" opacity="0.5" />
+            <path d="M50 145 L50 170" stroke="#d97706" stroke-width="2" />
+            <circle cx="50" cy="175" r="4" fill="#d97706" />
+        </svg>
+    </div>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- HERO SECTION                                         -->
+    <!-- ---------------------------------------------------- -->
+    <header class="hero">
+        <div class="container hero-content">
+            <div class="arabic-bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
+            <p class="hero-subtitle">Housewarming Ceremony</p>
+            
+            <!-- Ornament -->
+            <div class="ornament-divider">
+                <span class="ornament-line"></span>
+                <span class="ornament-symbol">✨</span>
+                <span class="ornament-line"></span>
+            </div>
+
+            <h1 class="host-names">Muhammed Jalib Vaikkileri<br>&<br>Fatima M.C.</h1>
+            <p class="hero-description">
+                "We request the pleasure of your company as we celebrate the blessings of our new home."
+            </p>
+            
+            <div class="hero-buttons">
+                <a href="#rsvp" class="btn btn-primary">Confirm Attendance</a>
+                <a href="#location" class="btn btn-secondary">View Location</a>
+            </div>
+
+            <!-- Live Countdown Timer -->
+            <div class="countdown-box">
+                <h3 class="countdown-title">Live Countdown</h3>
+                <div class="countdown-grid" id="countdown">
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="days">00</span>
+                        <span class="countdown-label">Days</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="hours">00</span>
+                        <span class="countdown-label">Hours</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="minutes">00</span>
+                        <span class="countdown-label">Min</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="seconds">00</span>
+                        <span class="countdown-label">Sec</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- ABOUT THE EVENT                                      -->
+    <!-- ---------------------------------------------------- -->
+    <section class="about reveal">
+        <div class="container">
+            <div class="about-card">
+                <h2 class="greeting-text" >السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ ٱللَّهِ وَبَرَكَاتُهُ </h2>
+                <p class="about-p">
+                    With the blessings of Allah (SWT), we warmly invite you and your family to join us for our Housewarming Ceremony and share in our happiness as we begin this new chapter of our lives.
+                </p>
+                <p class="about-p">
+                    Your presence and duas will make this occasion even more memorable.
+                </p>
+
+                <!-- Islamic Quote -->
+                <div class="quote-container">
+                    <div class="arabic-quote">وَٱللَّهُ جَعَلَ لَكُم مِّنۢ بُيُوتِكُمْ سَكَنًۭا وَجَعَلَ لَكُم مِّن جُلُودِ ٱلْأَنْعَـٰمِ بُيُوتًۭا تَسْتَخِفُّونَهَا يَوْمَ ظَعْنِكُمْ وَيَوْمَ إِقَامَتِكُمْ ۙ وَمِنْ أَصْوَافِهَا وَأَوْبَارِهَا وَأَشْعَارِهَآ أَثَـٰثًۭا وَمَتَـٰعًا إِلَىٰ حِينٍۢ ۝٨٠</div>
+                    <p class="english-quote">"And Allah has made for you from your homes a place of rest."</p>
+                    <p class="quote-author">— Surah An-Nahl (16:80)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- EVENT DETAILS                                        -->
+    <!-- ---------------------------------------------------- -->
+    <section class="details-section reveal">
+        <div class="container">
+            <div class="details-grid">
+                
+                <!-- Date -->
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                        </svg>
+                    </div>
+                    <h3 class="detail-title">Date</h3>
+                    <p class="detail-text">20 December 2026</p>
+                    <p class="detail-text" style="color:var(--accent-gold); font-size:0.85rem; margin-top:4px;">Rajab 11, 1448 AH</p>
+                </div>
+
+                <!-- Time -->
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                        </svg>
+                    </div>
+                    <h3 class="detail-title">Time</h3>
+                    <p class="detail-text">11:30 AM onwards</p>
+                </div>
+
+                <!-- Venue -->
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                    </div>
+                    <h3 class="detail-title">Venue</h3>
+                    <p class="detail-text detail-venue-name">BAITHUL MADINA</p>
+                    <p class="detail-text" style="font-size: 0.9rem;">Mangaattupaara, Chorodu east, vadakara</p>
+                </div>
+
+                <!-- Lunch -->
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm8-3h-3V2h-2v11h2v9h2v-9h1c1.66 0 3-1.34 3-3V9c0-1.66-1.34-3-3-3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="detail-title">Lunch</h3>
+                    <p class="detail-text">Will be served after the ceremony.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- GOOGLE MAP                                           -->
+    <!-- ---------------------------------------------------- -->
+    <section class="map-section reveal" id="location">
+        <div class="container">
+            <div class="map-card">
+                <div class="map-container">
+                    <!-- Embed mapping using resolved coordinates -->
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3904.6062140410497!2d75.5937759!3d11.623979!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba683ffadeeff8f%3A0x30d4471952caa69e!2sNanma%20Mangottupara!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+                <div class="map-action">
+                    <a href="https://maps.app.goo.gl/w9KewmuugsnGbFMSA" target="_blank" class="btn btn-primary">
+                        Open in Google Maps
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- RSVP SECTION                                         -->
+    <!-- ---------------------------------------------------- -->
+    <section class="rsvp-section reveal" id="rsvp">
+        <div class="container">
+            <div class="rsvp-header">
+                <h2>R.S.V.P</h2>
+                <p>Please let us know your attendance status by filling out the form below</p>
+            </div>
+
+            <div class="rsvp-card">
+                <!-- Form State -->
+                <form id="rsvp-form">
+                    <div class="rsvp-form-group">
+                        <label class="rsvp-label">Will you attend?</label>
+                        <div class="attendance-options">
+                            <div class="attendance-option">
+                                <input type="radio" id="attend-yes" name="attendance" value="Yes, InshaAllah" required>
+                                <label for="attend-yes" class="attendance-label">Yes, InshaAllah</label>
+                            </div>
+                            <div class="attendance-option">
+                                <input type="radio" id="attend-no" name="attendance" value="Sorry, I can't attend">
+                                <label for="attend-no" class="attendance-label">Sorry, I can't attend</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rsvp-form-group">
+                        <label for="rsvp-name" class="rsvp-label">Name</label>
+                        <input type="text" id="rsvp-name" class="form-input" placeholder="Your Full Name" required>
+                    </div>
+
+                    <div class="rsvp-form-group">
+                        <label for="rsvp-mobile" class="rsvp-label">Mobile Number</label>
+                        <input type="tel" id="rsvp-mobile" class="form-input" placeholder="e.g. +91 98765 43210" required>
+                    </div>
+
+                    <div class="rsvp-form-group" id="guests-group">
+                        <label for="rsvp-guests" class="rsvp-label">Number of Guests</label>
+                        <input type="number" id="rsvp-guests" class="form-input" min="1" max="20" value="1">
+                    </div>
+
+                    <div class="rsvp-form-group">
+                        <label for="rsvp-message" class="rsvp-label">Special Message / Dua</label>
+                        <textarea id="rsvp-message" class="form-input" placeholder="Send your greetings, blessings, or special notes..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary rsvp-submit-btn">Submit RSVP</button>
+                </form>
+
+                <!-- Success State Overlay -->
+                <div class="rsvp-success-message" id="rsvp-success">
+                    <div class="success-icon">🌸</div>
+                    <h2>Thank You!</h2>
+                    <p style="margin: 15px 0 25px; color:#cbd5e1; line-height: 1.6;">
+                        Your RSVP has been received successfully.<br>
+                        May Allah (SWT) reward you. We look forward to welcoming you!
+                    </p>
+                    <button type="button" class="btn btn-secondary" id="edit-rsvp-btn">Edit RSVP</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- CONTACT SECTION                                      -->
+    <!-- ---------------------------------------------------- -->
+    <section class="contact-section reveal">
+        <div class="container">
+            <h2>Contact Hosts</h2>
+            <p>For any queries or guidance, feel free to reach out to us</p>
+            
+            <div class="contact-grid">
+                <!-- Muhammed Jalib Card -->
+                <div class="contact-card">
+                    <div class="contact-name">Muhammed Jalib Vaikkileri</div>
+                    
+                    <a href="tel:+919072557021" class="contact-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.57a1.003 1.003 0 0 0-1.01.24l-2.2 2.2a15.045 15.045 0 0 1-6.59-6.59l2.2-2.2c.28-.28.36-.67.25-1.02C8.75 6.3 8.56 5.12 8.56 3.9c0-.55-.45-1-1-1H3.79c-.55 0-1 .45-1 1 0 9.39 7.63 17.02 17.02 17.02.55 0 1-.45 1-1v-3.79c0-.55-.45-1-1-1z"/>
+                        </svg>
+                        +91 90725 57021
+                    </a>
+
+                    <a href="mailto:jalibkhan@gmail.com" class="contact-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                        jalibkhan@gmail.com
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- FOOTER                                               -->
+    <!-- ---------------------------------------------------- -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-blessing">
+                "May Allah (SWT) bless our home with<br>Barakah, peace, happiness, and countless blessings."
+            </p>
+            <p class="footer-closing">Jazakumullahu Khairan</p>
+            
+             
+            <p class="footer-bottom">
+                &copy; 2026 Muhammed Jalib & Fatima M.C. All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
