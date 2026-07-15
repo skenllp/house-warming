@@ -1,6 +1,227 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // ==========================================
+    // 0. SCRATCH TO OPEN INVITE
+    // ==========================================
+    const scratchCanvas = document.getElementById("scratchCanvas");
+    const scratchScreen = document.getElementById("scratchScreen");
+    const bgAudio = document.getElementById('bg-audio');
+    const audioToggle = document.getElementById('audio-toggle');
+    const audioIcon = document.getElementById('audio-icon');
+
+    if (scratchCanvas && scratchScreen) {
+        const ctx = scratchCanvas.getContext("2d");
+        let isDrawing = false;
+        let isFinished = false;
+
+        // Resize Canvas dynamically to match parent container size
+        function resizeCanvas() {
+            if (isFinished) return;
+            const rect = scratchCanvas.parentNode.getBoundingClientRect();
+            scratchCanvas.width = rect.width;
+            scratchCanvas.height = rect.height;
+            drawGoldFoil();
+        }
+
+        // Draw Gold Foil Texture programmatically
+        function drawGoldFoil() {
+            const w = scratchCanvas.width;
+            const h = scratchCanvas.height;
+
+            // 1. Create linear metallic gold gradient
+            const grad = ctx.createLinearGradient(0, 0, w, h);
+            grad.addColorStop(0, '#d4af37');   // Metallic Gold
+            grad.addColorStop(0.25, '#fcf6ba'); // Light Gold Shine
+            grad.addColorStop(0.5, '#aa771c');  // Antique Gold
+            grad.addColorStop(0.75, '#fbf5b7'); // Light Gold Shine
+            grad.addColorStop(1, '#8a5a00');    // Rich Dark Gold
+
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, w, h);
+
+            // 2. Add fine-grained gold foil sparkle noise
+            const imgData = ctx.getImageData(0, 0, w, h);
+            const data = imgData.data;
+            for (let i = 0; i < data.length; i += 4) {
+                const noise = (Math.random() - 0.5) * 22; // subtle sparkle grain
+                data[i] = Math.min(255, Math.max(0, data[i] + noise));     // R
+                data[i+1] = Math.min(255, Math.max(0, data[i+1] + noise)); // G
+                data[i+2] = Math.min(255, Math.max(0, data[i+2] + noise)); // B
+            }
+            ctx.putImageData(imgData, 0, 0);
+
+            // 3. Superimpose luxury thin geometric grid pattern on canvas
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+            ctx.lineWidth = 1;
+            const gridSize = 45;
+            ctx.beginPath();
+            for (let x = 0; x < w; x += gridSize) {
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, h);
+            }
+            for (let y = 0; y < h; y += gridSize) {
+                ctx.moveTo(0, y);
+                ctx.lineTo(w, y);
+            }
+            ctx.stroke();
+
+            // 4. Double luxury borders around canvas
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.lineWidth = 8;
+            ctx.strokeRect(15, 15, w - 30, h - 30);
+
+            ctx.strokeStyle = 'rgba(180, 83, 9, 0.3)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(24, 24, w - 48, h - 48);
+        }
+
+        // Initialize Canvas Size
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Scratch Logic
+        ctx.globalCompositeOperation = "destination-out";
+
+        function getMousePos(e) {
+            const rect = scratchCanvas.getBoundingClientRect();
+            // Handle touch vs mouse pointer coordinates
+            if (e.touches && e.touches[0]) {
+                return {
+                    x: e.touches[0].clientX - rect.left,
+                    y: e.touches[0].clientY - rect.top
+                };
+            }
+            return {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+        }
+
+        function scratch(x, y) {
+            ctx.beginPath();
+            ctx.arc(x, y, 40, 0, Math.PI * 2); // 40px radius brush
+            ctx.fill();
+            checkReveal();
+        }
+
+        // Mouse Listeners
+        scratchCanvas.addEventListener("mousedown", (e) => {
+            isDrawing = true;
+            const pos = getMousePos(e);
+            scratch(pos.x, pos.y);
+        });
+
+        scratchCanvas.addEventListener("mousemove", (e) => {
+            if (!isDrawing) return;
+            e.preventDefault();
+            const pos = getMousePos(e);
+            scratch(pos.x, pos.y);
+        });
+
+        window.addEventListener("mouseup", () => {
+            isDrawing = false;
+        });
+
+        // Touch Listeners (Mobile compatibility)
+        scratchCanvas.addEventListener("touchstart", (e) => {
+            isDrawing = true;
+            const pos = getMousePos(e);
+            scratch(pos.x, pos.y);
+        }, { passive: false });
+
+        scratchCanvas.addEventListener("touchmove", (e) => {
+            if (!isDrawing) return;
+            e.preventDefault();
+            const pos = getMousePos(e);
+            scratch(pos.x, pos.y);
+        }, { passive: false });
+
+        window.addEventListener("touchend", () => {
+            isDrawing = false;
+        });
+
+        // Calculate transparent pixel percentage (debounced)
+        let checkTimeout;
+        function checkReveal() {
+            if (isFinished) return;
+            if (checkTimeout) return;
+
+            checkTimeout = setTimeout(() => {
+                checkTimeout = null;
+
+                const w = scratchCanvas.width;
+                const h = scratchCanvas.height;
+                const imgData = ctx.getImageData(0, 0, w, h);
+                const pixels = imgData.data;
+                let transparent = 0;
+                
+                // Sample every 48th pixel for mobile performance optimization
+                const step = 48;
+                let totalChecked = 0;
+                for (let i = 3; i < pixels.length; i += 4 * step) {
+                    totalChecked++;
+                    if (pixels[i] === 0) {
+                        transparent++;
+                    }
+                }
+
+                const percent = transparent / totalChecked;
+
+                // When 60% of canvas is transparent, reveal invitation
+                if (percent > 0.60) {
+                    revealInvitation();
+                }
+            }, 100); // Sample maximum once every 100ms
+        }
+
+        function revealInvitation() {
+            if (isFinished) return;
+            isFinished = true;
+
+            // 1. Play Background Daff/Music (satisfies browser interaction policies)
+            if (bgAudio) {
+                bgAudio.play()
+                    .then(() => {
+                        audioIcon.innerHTML = `
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                        `;
+                        audioToggle.setAttribute('title', 'Pause Music');
+                    })
+                    .catch(err => {
+                        console.log("Audio playback blocked by browser security:", err);
+                    });
+            }
+
+            // 2. Animate out scratch screen overlay with GSAP
+            gsap.to("#scratchScreen", {
+                opacity: 0,
+                scale: 1.05,
+                duration: 1.2,
+                ease: "power3.out",
+                onComplete() {
+                    scratchScreen.remove();
+                }
+            });
+
+            // 3. Stagger animate in the Hero section components
+            gsap.from(".hero", {
+                scale: 1.08,
+                opacity: 0,
+                duration: 1.4,
+                ease: "power3.out"
+            });
+
+            gsap.from(".hero-content > *", {
+                y: 60,
+                opacity: 0,
+                stagger: 0.15,
+                duration: 1.2,
+                ease: "power3.out"
+            });
+        }
+    }
+
+    // ==========================================
     // 1. LIVE COUNTDOWN TIMER
     // ==========================================
     // Target: 20 December 2026, 11:30 AM (Indian Standard Time: +05:30)
@@ -17,19 +238,16 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('minutes').innerText = "00";
             document.getElementById('seconds').innerText = "00";
             
-            // Optionally update title
             const titleEl = document.querySelector('.countdown-title');
             if (titleEl) titleEl.innerText = "The Ceremony Has Begun!";
             return;
         }
 
-        // Time calculations
         const days = Math.floor(difference / (1000 * 60 * 60 * 24));
         const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-        // Update DOM with leading zeros
         document.getElementById('days').innerText = days.toString().padStart(2, '0');
         document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
         document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
@@ -49,7 +267,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const attendYesRadio = document.getElementById('attend-yes');
     const attendNoRadio = document.getElementById('attend-no');
 
-    // Toggle number of guests field based on attendance
     if (attendYesRadio && attendNoRadio) {
         attendYesRadio.addEventListener('change', () => {
             guestsGroup.style.display = 'block';
@@ -64,7 +281,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Check if user already RSVP'd on this device
     const existingRsvp = localStorage.getItem('my_house_warming_rsvp');
     if (existingRsvp) {
         const rsvpData = JSON.parse(existingRsvp);
@@ -77,7 +293,6 @@ document.addEventListener('DOMContentLoaded', () => {
         rsvpForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Extract values
             const attendance = document.querySelector('input[name="attendance"]:checked').value;
             const name = document.getElementById('rsvp-name').value.trim();
             const mobile = document.getElementById('rsvp-mobile').value.trim();
@@ -94,7 +309,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 timestamp: new Date().toISOString()
             };
 
-            // Loading state
             const submitBtn = rsvpForm.querySelector('.rsvp-submit-btn');
             const originalBtnText = submitBtn.innerText;
             submitBtn.innerText = 'Submitting...';
@@ -109,7 +323,6 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             try {
-                // Post to Google Sheets Apps Script web app
                 await fetch(SCRIPT_URL, {
                     method: "POST",
                     headers: {
@@ -118,7 +331,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify(googleSheetsData)
                 });
 
-                // Local backup saving (for admin dashboard preview)
                 localStorage.setItem('my_house_warming_rsvp', JSON.stringify(rsvpObject));
 
                 let allRsvps = JSON.parse(localStorage.getItem('house_warming_rsvps') || '[]');
@@ -126,16 +338,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 allRsvps.push(rsvpObject);
                 localStorage.setItem('house_warming_rsvps', JSON.stringify(allRsvps));
 
-                // Success confirmation
                 showSuccessState(rsvpObject);
                 rsvpForm.reset();
 
             } catch (err) {
                 console.error("Error submitting RSVP:", err);
                 
-                // Fallback: Google Apps Script Web Apps often trigger CORS exceptions on static pages
-                // but the submission still completes successfully on the Sheets backend.
-                // We save it locally and show success so the user is not stuck.
                 localStorage.setItem('my_house_warming_rsvp', JSON.stringify(rsvpObject));
 
                 let allRsvps = JSON.parse(localStorage.getItem('house_warming_rsvps') || '[]');
@@ -154,11 +362,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (editRsvpBtn) {
         editRsvpBtn.addEventListener('click', () => {
-            // Restore form layout
             rsvpForm.style.display = 'block';
             rsvpSuccess.style.display = 'none';
 
-            // Prefill with stored details
             const stored = localStorage.getItem('my_house_warming_rsvp');
             if (stored) {
                 const data = JSON.parse(stored);
@@ -209,7 +415,6 @@ document.addEventListener('DOMContentLoaded', () => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
-                    // Stop observing once animated
                     observer.unobserve(entry.target);
                 }
             });
@@ -220,31 +425,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         revealElements.forEach(el => observer.observe(el));
     } else {
-        // Fallback for older browsers
         revealElements.forEach(el => el.classList.add('active'));
     }
 
 
     // ==========================================
-    // 4. AUDIO CONTROLLER PLAYBACK & AUTOPLAY
+    // 4. AUDIO CONTROLLER PLAYBACK
     // ==========================================
-    const audioToggle = document.getElementById('audio-toggle');
-    const bgAudio = document.getElementById('bg-audio');
-    const audioIcon = document.getElementById('audio-icon');
-
     function playAudio() {
         if (bgAudio && bgAudio.paused) {
             bgAudio.play()
                 .then(() => {
-                    // Update toggle icon to playing state
                     audioIcon.innerHTML = `
                         <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
                     `;
                     audioToggle.setAttribute('title', 'Pause Music');
-                    removeAutoplayListeners();
                 })
                 .catch(err => {
-                    console.log("Autoplay blocked by browser. Awaiting user interaction.", err);
+                    console.log("Audio playback failed:", err);
                 });
         }
     }
@@ -259,32 +457,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Try playing immediately
-    if (bgAudio) {
-        // Attempt autoplay
-        playAudio();
-
-        // Listeners for first user interaction to trigger autoplay
-        const interactionEvents = ['click', 'touchstart', 'scroll', 'keydown'];
-        
-        function handleInteractionAutoplay() {
-            playAudio();
-        }
-
-        interactionEvents.forEach(event => {
-            document.addEventListener(event, handleInteractionAutoplay, { once: true });
-        });
-
-        function removeAutoplayListeners() {
-            interactionEvents.forEach(event => {
-                document.removeEventListener(event, handleInteractionAutoplay);
-            });
-        }
-    }
-
     if (audioToggle && bgAudio && audioIcon) {
         audioToggle.addEventListener('click', (e) => {
-            e.stopPropagation(); // Avoid triggering document click listener
+            e.stopPropagation();
             if (bgAudio.paused) {
                 playAudio();
             } else {
