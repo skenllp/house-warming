@@ -73,6 +73,18 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.strokeStyle = 'rgba(180, 83, 9, 0.3)';
             ctx.lineWidth = 2;
             ctx.strokeRect(24, 24, w - 48, h - 48);
+
+            // 5. Draw scratch instructions in the center of the gold foil card
+            ctx.fillStyle = '#7c2d12'; // Rust-gold color
+            ctx.font = '600 15px "Montserrat", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // Soft white/gold glow contour behind text
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.lineWidth = 4;
+            ctx.strokeText('Scratch to Open Invitation ', w / 2, h / 2);
+            ctx.fillText('Scratch to Open Invitation ', w / 2, h / 2);
         }
 
         // Initialize Canvas Size
