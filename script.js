@@ -94,6 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Scratch Logic
         ctx.globalCompositeOperation = "destination-out";
 
+        let autoRevealStarted = false;
+        let isChecking = false;
+
         function getMousePos(e) {
             const rect = scratchCanvas.getBoundingClientRect();
             // Handle touch vs mouse pointer coordinates
@@ -110,10 +113,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function scratch(x, y) {
+            if (autoRevealStarted) return;
+
             ctx.beginPath();
-            ctx.arc(x, y, 40, 0, Math.PI * 2); // 40px radius brush
+            ctx.arc(x, y, 35, 0, Math.PI * 2); // 35px radius brush
             ctx.fill();
+
             checkReveal();
+        }
+
+        // Calculate transparent pixel percentage (highly optimized downsampling)
+        function checkReveal() {
+            if (autoRevealStarted) return;
+            if (isChecking) return;
+            isChecking = true;
+
+            setTimeout(() => {
+                isChecking = false;
+                if (autoRevealStarted) return;
+
+                const w = scratchCanvas.width;
+                const h = scratchCanvas.height;
+                const imgData = ctx.getImageData(0, 0, w, h);
+                const pixels = imgData.data;
+                let transparent = 0;
+                
+                // Sample every 24th pixel for high performance calculations
+                const step = 24;
+                let totalChecked = 0;
+                for (let i = 3; i < pixels.length; i += 4 * step) {
+                    totalChecked++;
+                    if (pixels[i] === 0) {
+                        transparent++;
+                    }
+                }
+
+                const percent = transparent / totalChecked;
+
+                // Trigger transition when 22% of the gold layer is scratched
+                if (percent >= 0.22) {
+                    revealInvitation();
+                }
+            }, 80); // Debounce check every 80ms
         }
 
         // Mouse Listeners
@@ -152,45 +193,11 @@ document.addEventListener('DOMContentLoaded', () => {
             isDrawing = false;
         });
 
-        // Calculate transparent pixel percentage (debounced)
-        let checkTimeout;
-        function checkReveal() {
-            if (isFinished) return;
-            if (checkTimeout) return;
-
-            checkTimeout = setTimeout(() => {
-                checkTimeout = null;
-
-                const w = scratchCanvas.width;
-                const h = scratchCanvas.height;
-                const imgData = ctx.getImageData(0, 0, w, h);
-                const pixels = imgData.data;
-                let transparent = 0;
-                
-                // Sample every 48th pixel for mobile performance optimization
-                const step = 48;
-                let totalChecked = 0;
-                for (let i = 3; i < pixels.length; i += 4 * step) {
-                    totalChecked++;
-                    if (pixels[i] === 0) {
-                        transparent++;
-                    }
-                }
-
-                const percent = transparent / totalChecked;
-
-                // When 60% of canvas is transparent, reveal invitation
-                if (percent > 0.60) {
-                    revealInvitation();
-                }
-            }, 100); // Sample maximum once every 100ms
-        }
-
         function revealInvitation() {
-            if (isFinished) return;
-            isFinished = true;
+            if (autoRevealStarted) return;
+            autoRevealStarted = true;
 
-            // 1. Play Background Daff/Music (satisfies browser interaction policies)
+            // 1. Play Background Music (satisfies browser interaction policies)
             if (bgAudio) {
                 bgAudio.play()
                     .then(() => {
@@ -204,22 +211,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
             }
 
-            // 2. Animate out scratch screen overlay with GSAP
-            gsap.to("#scratchScreen", {
+            // 2. Fade out the canvas gold layer overlay over 0.6 seconds
+            gsap.to("#scratchCanvas", {
                 opacity: 0,
-                scale: 1.05,
-                duration: 1.2,
-                ease: "power3.out",
+                duration: 0.6,
+                ease: "power2.out",
                 onComplete() {
-                    scratchScreen.remove();
+                    // 3. Fade out the whole scratch screen container
+                    gsap.to("#scratchScreen", {
+                        opacity: 0,
+                        duration: 0.6,
+                        ease: "power2.out",
+                        onComplete() {
+                            scratchScreen.remove();
+                        }
+                    });
                 }
             });
 
-            // 3. Stagger animate in the Hero section components
+            // 4. Stagger animate in the Hero section components
             gsap.from(".hero", {
-                scale: 1.08,
+                scale: 1.05,
                 opacity: 0,
-                duration: 1.4,
+                duration: 1.2,
                 ease: "power3.out"
             });
 
@@ -227,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 y: 60,
                 opacity: 0,
                 stagger: 0.15,
-                duration: 1.2,
+                duration: 1,
                 ease: "power3.out"
             });
         }
