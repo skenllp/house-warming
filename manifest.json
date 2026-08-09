@@ -1,0 +1,10 @@
+{
+  "name": "House Warming Ceremony - Barakah",
+  "short_name": "Barakah",
+  "description": "House Warming Ceremony Invitation of Muhammed Noujath & Hasna Noujath at Barakah, Kuttikkakam",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#04291D",
+  "theme_color": "#04291D",
+  "icons": []
+}

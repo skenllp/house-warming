@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#04291D" />
+    <meta
+      name="description"
+      content="House Warming Ceremony Invitation — Muhammed Noujath & Hasna Noujath at Barakah (بَرَكَة), Kuttikkakam, Munambu"
+    />
+    <title>Barakah (بَرَكَة) — House Warming Invitation | Muhammed Noujath & Hasna Noujath</title>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://house-warming-baraka.vercel.app" />
+    <meta
+      property="og:title"
+      content="Muhammed Noujath & Hasna Noujath | House Warming Ceremony — Barakah (بَرَكَة)"
+    />
+    <meta
+      property="og:description"
+      content="With the blessings of Almighty Allah, we cordially invite you to celebrate the House Warming Ceremony of our new home, Barakah (بَرَكَة)."
+    />
+    <meta
+      property="og:image"
+      content="https://house-warming-baraka.vercel.app/og-image.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="House Warming Ceremony invitation — Muhammed Noujath & Hasna Noujath, Barakah"
+    />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="twitter:title"
+      content="Muhammed Noujath & Hasna Noujath | House Warming Ceremony — Barakah"
+    />
+    <meta
+      property="twitter:description"
+      content="With the blessings of Almighty Allah, we cordially invite you to celebrate the House Warming Ceremony of our new home, Barakah."
+    />
+    <meta property="twitter:image" content="https://house-warming-baraka.vercel.app/og-image.jpg" />
+
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- House Intro Video Overlay -->
+    <div id="intro-overlay" class="intro-overlay" role="region" aria-label="House Intro Video">
+      <video id="intro-video" class="intro-video" muted playsinline preload="auto">
+        <source src="house-intro.mp4" type="video/mp4" />
+        Your browser does not support HTML5 video.
+      </video>
+
+      <div class="intro-start-card" id="intro-start-card">
+        <div class="intro-card-content">
+          <svg class="intro-house-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 6L4 28v30h18V40h20v18h18V28L32 6z" />
+            <polygon points="32,6 60,28 55,28 32,10.5 9,28 4,28" />
+          </svg>
+          <p class="intro-card-eyebrow">House Warming Ceremony</p>
+          <h2 class="intro-card-title">BARAKAH <span style="font-family: var(--font-arabic); font-size: 0.85em; color: var(--accent-gold-light);">بَرَكَة</span></h2>
+          <button id="open-invitation-btn" class="btn btn-open-invitation">
+            <svg viewBox="0 0 24 24" style="width:20px; height:20px; fill:currentColor; margin-right:8px; vertical-align:middle;">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+            Open Invitation
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 
+    ========================================================
+    PREVIOUS DOOR OPENING ANIMATION (COMMENTED OUT PER REQUEST)
+    ========================================================
+    <div
+      id="opening"
+      class="opening"
+      role="button"
+      tabindex="0"
+      aria-label="Enter the invitation"
+    >
+      <div class="opening-panel opening-panel--left"></div>
+      <div class="opening-panel opening-panel--right"></div>
+      <span class="opening-seam" aria-hidden="true"></span>
+      <div class="opening-content">
+        <svg
+          class="opening-house-icon"
+          viewBox="0 0 64 64"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M32 6L4 28v30h18V40h20v18h18V28L32 6z" />
+          <polygon points="32,6 60,28 55,28 32,10.5 9,28 4,28" />
+        </svg>
+        <p class="opening-eyebrow">House Warming Ceremony</p>
+        <h2 class="opening-title">BARAKAH <span style="font-family: var(--font-arabic); font-size: 0.85em;">بَرَكَة</span></h2>
+        <p class="opening-hint">Tap To Open The Doors</p>
+      </div>
+    </div>
+    ========================================================
+    -->
+
+    <!-- Background Music -->
+    <div class="audio-controller" id="audio-toggle" title="Play/Pause Music">
+      <svg id="audio-icon" viewBox="0 0 24 24">
+        <path
+          d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM12 4L9.91 6.09 12 8.18V4zm-8.09-.09L2.81 5.09 6.82 9H4v6h4l5 5v-6.83l4.88 4.88c-.62.47-1.31.85-2.08 1.09v2.01c1.3-.3 2.49-.93 3.47-1.76l2.62 2.62 1.41-1.41L4.82 2.81 3.91 3.91zM12 15.17L9.83 13H8v-2h1.83l.26-.26 1.91 1.91v2.52z"
+        />
+      </svg>
+      <audio id="bg-audio" loop preload="auto">
+        <source src="music.mp3" type="audio/mpeg" />
+      </audio>
+    </div>
+
+    <!-- Floating Gold Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- HERO SECTION                                         -->
+    <!-- ---------------------------------------------------- -->
+    <header class="hero">
+      <div class="hero-bg">
+        <img
+          src="house.jpeg"
+          alt="Barakah Residence — Muhammed Noujath & Hasna Noujath"
+          id="heroImg"
+        />
+      </div>
+      <div class="container hero-content">
+        <p class="hero-eyebrow">House Warming Ceremony</p>
+        <h1 class="hero-title hero-title-names" lang="ar">
+          محمد نَوْجَة<span class="hero-amp">&amp;</span>حسناء نَوْجَة
+        </h1>
+        <p class="hero-names-translit">Muhammed Noujath &amp; Hasna Noujath</p>
+
+        <div class="ornament-divider">
+          <span class="ornament-line"></span>
+          <span class="ornament-symbol">✦</span>
+          <span class="ornament-line"></span>
+        </div>
+
+        <p class="hero-subtitle">
+          "With the blessings of Almighty Allah, we cordially invite you to
+          celebrate the House Warming Ceremony of our new home, <strong>Barakah</strong>."
+        </p>
+
+        <!-- Live Countdown Timer -->
+        <div class="countdown-box">
+          <h3 class="countdown-title">Counting Down To The Celebration</h3>
+          <div class="countdown-grid" id="countdown">
+            <div class="countdown-item">
+              <span class="countdown-number" id="days">00</span>
+              <span class="countdown-label">Days</span>
+            </div>
+            <div class="countdown-item">
+              <span class="countdown-number" id="hours">00</span>
+              <span class="countdown-label">Hours</span>
+            </div>
+            <div class="countdown-item">
+              <span class="countdown-number" id="minutes">00</span>
+              <span class="countdown-label">Min</span>
+            </div>
+            <div class="countdown-item">
+              <span class="countdown-number" id="seconds">00</span>
+              <span class="countdown-label">Sec</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scroll-cue" id="scroll-cue" role="button" tabindex="0" aria-label="Scroll to next section">
+        <span>Scroll</span><span class="chevron"></span>
+      </div>
+    </header>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- OWNER DETAILS / ABOUT                                -->
+    <!-- ---------------------------------------------------- -->
+    <section class="about reveal">
+      <div class="container">
+        <div class="about-card">
+          <p class="section-eyebrow">With Love &amp; Gratitude</p>
+          <h2 class="greeting-text">Welcome To Barakah (بَرَكَة)</h2>
+
+          <!-- Arabic Greeting -->
+          <div class="arabic-greeting-block">
+            <p class="content-label">Islamic Greeting</p>
+            <p class="arabic-greeting-text" lang="ar">
+              السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ ٱللَّٰهِ وَبَرَكَاتُهُ
+            </p>
+            <p class="arabic-greeting-translit">
+              Assalamu Alaikum Wa Rahmatullahi Wa Barakatuh
+            </p>
+          </div>
+
+          <!-- Invitation Message -->
+          <div class="invitation-block">
+            <p class="content-label">Invitation Message</p>
+            <p class="about-p">
+              With the blessings of Allah (SWT), we warmly invite you and your
+              family to join us for the Housewarming Ceremony of our new home,
+              <strong>Barakah</strong>, and share in our happiness as we begin this new chapter of our lives.
+            </p>
+            <p class="about-p">
+              Your presence and dua'as will make this occasion truly special and memorable for us.
+            </p>
+          </div>
+
+          <!-- Hosted By -->
+          <div class="owner-grid">
+            <div class="owner-card">
+              <p class="owner-role">Host</p>
+              <p class="owner-name">Muhammed Noujath</p>
+            </div>
+            <div class="owner-card">
+              <p class="owner-role">Wife</p>
+              <p class="owner-name">Hasna Noujath</p>
+            </div>
+          </div>
+
+          <!-- Family Members -->
+          <div class="family-block">
+            <p class="family-label">With Best Wishes From</p>
+            <div class="family-names">
+              <p class="family-lead">All our family members &amp;</p>
+              <p class="family-subnames">Fathima, Aysha, Hawwaabi, Aminah</p>
+            </div>
+          </div>
+
+          <!-- Quran Verse -->
+          <div class="quote-container">
+            <p class="content-label">Quran Verse (Arabic)</p>
+            <p class="quran-arabic-text" lang="ar">
+              وَقُل رَّبِّ أَنزِلْنِي مُنزَلًا مُّبَارَكًا وَأَنتَ خَيْرُ الْمُنزِلِينَ
+            </p>
+            <p class="content-label">English Translation</p>
+            <p class="quote-text">
+              "And say: 'My Lord, cause me to land at a blessed landing place, for You are the best to accommodate.'"
+            </p>
+            <p class="quote-author">— Surah Al-Mu'minun (23:29)</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- HOUSE NAME SECTION                                   -->
+    <!-- ---------------------------------------------------- -->
+    <section class="house-name-section reveal-zoom">
+      <div class="container">
+        <div class="house-icon-wrap">
+          <svg
+            class="house-icon"
+            viewBox="0 0 64 64"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M32 6L4 28v30h18V40h20v18h18V28L32 6z" />
+            <polygon points="32,6 60,28 55,28 32,10.5 9,28 4,28" />
+          </svg>
+        </div>
+        <p class="house-name-label">Presenting Our New Home</p>
+        <h2 class="house-name">BARAKAH</h2>
+        <p class="house-name-sub" style="font-family: var(--font-arabic); font-size: 2rem; margin-top: 8px; color: var(--accent-gold-light);">بَرَكَة‎</p>
+        <p class="house-name-sub">KUTTIKKAKAM, MUNAMBU</p>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- EVENT DETAILS                                        -->
+    <!-- ---------------------------------------------------- -->
+    <section class="details-section reveal">
+      <div class="container">
+        <div class="section-header">
+          <h2>Event Details</h2>
+          <p>Mark your calendar and join us for a blessed day of celebration</p>
+        </div>
+        <div class="details-grid">
+          <!-- Date -->
+          <div class="detail-card">
+            <div class="detail-icon">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"
+                />
+              </svg>
+            </div>
+            <h3 class="detail-title">Date</h3>
+            <p class="detail-text detail-highlight">August 19, 2026</p>
+            <p class="detail-text" style="font-size: 0.9rem; margin-top: 4px">
+              Wednesday
+            </p>
+          </div>
+
+          <!-- Reception -->
+          <div class="detail-card">
+            <div class="detail-icon">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm8-3h-3V2h-2v11h2v9h2v-9h1c1.66 0 3-1.34 3-3V9c0-1.66-1.34-3-3-3z"
+                />
+              </svg>
+            </div>
+            <h3 class="detail-title">Reception</h3>
+            <p class="detail-text detail-highlight">Housewarming &amp; Feast</p>
+            <p class="detail-text" style="font-size: 0.9rem; margin-top: 4px">
+              Joining Together In Du'a &amp; Celebration
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- VENUE SECTION                                        -->
+    <!-- ---------------------------------------------------- -->
+    <section class="venue-section reveal" id="location">
+      <div class="container">
+        <div class="venue-card">
+          <div class="venue-body">
+            <div class="venue-pin">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                />
+              </svg>
+            </div>
+            <p class="venue-eyebrow">Join Us At</p>
+            <h2 class="venue-name">BARAKAH <span style="font-family: var(--font-arabic); font-size: 0.85em; font-weight: normal; color: var(--accent-gold-light);">(بَرَكَة)</span></h2>
+            <p class="venue-address">
+              <strong>Kuttikkakam, Munambu</strong><br />
+              Near Kunni Valapp Juma'a Masjid<br />
+              Join us as we open the doors of our new home for the very first time.
+            </p>
+            <a
+              href="https://maps.app.goo.gl/ywo9FgEGDtCpUd9i8?g_st=aw"
+              target="_blank"
+              rel="noopener"
+              class="btn btn-primary"
+            >
+              <svg viewBox="0 0 24 24" style="width:16px; height:16px; fill:currentColor; vertical-align:middle; margin-right:6px;"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> Open Location in Google Maps
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- HOUSE GALLERY                                        -->
+    <!-- ---------------------------------------------------- -->
+    <!-- <section class="gallery-section reveal">
+      <div class="container">
+        <div class="section-header">
+          <h2>Residence Gallery</h2>
+          <p>A glimpse into the architecture and beauty of Barakah</p>
+        </div>
+        <div class="gallery-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+          <div class="gallery-card reveal-left">
+            <img src="house.jpeg" alt="Barakah Residence Facade &amp; Courtyard" />
+            <div class="gallery-overlay"><span>Barakah Residence</span></div>
+          </div>
+          <div class="gallery-card reveal-right">
+            <img src="house-gate.jpeg" alt="Barakah Grand Entrance Gate" />
+            <div class="gallery-overlay"><span>Grand Entrance &amp; Gate</span></div>
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- ---------------------------------------------------- -->
+    <!-- CONTACT SECTION                                      -->
+    <!-- ---------------------------------------------------- -->
+    <section class="contact-section reveal">
+      <div class="container">
+        <div class="section-header" style="margin-bottom: 40px">
+          <h2>Contact Host</h2>
+          <p>For any queries or directions, feel free to reach out to us</p>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-card">
+            <div class="contact-avatar">MN</div>
+            <div class="contact-name">Muhammed Noujath &amp; Hasna</div>
+            <p class="contact-role">Hosts &amp; Family</p>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">
+              +91 96208 04559
+            </p>
+
+            <div class="contact-buttons">
+              <a href="tel:+919620804559" class="btn-call">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.57a1.003 1.003 0 0 0-1.01.24l-2.2 2.2a15.045 15.045 0 0 1-6.59-6.59l2.2-2.2c.28-.28.36-.67.25-1.02C8.75 6.3 8.56 5.12 8.56 3.9c0-.55-.45-1-1-1H3.79c-.55 0-1 .45-1 1 0 9.39 7.63 17.02 17.02 17.02.55 0 1-.45 1-1v-3.79c0-.55-.45-1-1-1z"
+                  />
+                </svg>
+                Call Us
+              </a>
+              <a
+                href="https://wa.me/919620804559?text=Assalamu%20Alaikum!%20Congratulations%20Muhammed%20Noujath%20%26%20Hasna!%20We%20are%20looking%20forward%20to%20attending%20the%20Housewarming%20at%20Barakah."
+                target="_blank"
+                rel="noopener"
+                class="btn-whatsapp"
+              >
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm5.8 14.13c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.13.11-1.82-.11-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.79-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.01-2.41.27-.29.58-.36.78-.36.19 0 .39 0 .56.01.18.01.42-.07.65.5.24.58.82 2.01.89 2.15.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.17 1.52 1.9 1.05.94 1.93 1.23 2.21 1.37.28.14.44.12.61-.07.16-.19.7-.81.88-1.09.19-.28.37-.23.62-.14.26.09 1.63.77 1.91.91.28.14.47.21.54.33.07.12.07.68-.17 1.35z"
+                  />
+                </svg>
+                WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------- -->
+    <!-- FOOTER                                               -->
+    <!-- ---------------------------------------------------- -->
+    <footer class="footer">
+      <div class="container">
+        <svg
+          class="footer-icon"
+          viewBox="0 0 64 64"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M32 6L4 28v30h18V40h20v18h18V28L32 6z" />
+          <polygon points="32,6 60,28 55,28 32,10.5 9,28 4,28" />
+        </svg>
+        <p class="footer-message">
+          We look forward to celebrating this memorable occasion with your
+          blessed presence.
+        </p>
+        <p class="footer-love-label">With Love</p>
+        <p class="footer-names">Muhammed Noujath &amp; Hasna Noujath</p>
+
+        <p class="footer-bottom">
+          &copy; 2026 Muhammed Noujath &amp; Hasna Noujath. All Rights
+          Reserved. &mdash; BARAKAH (بَرَكَة)
+        </p>
+      </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
