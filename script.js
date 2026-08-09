@@ -238,23 +238,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // 6. SCROLL CUE CLICK HANDLER
+    // 6. SCROLL CUE CLICK & FADE OUT ON SCROLL
     // ==========================================
-    const scrollCue = document.getElementById('scroll-cue');
+    const scrollCue = document.getElementById('scrollCue');
     if (scrollCue) {
-        function scrollToNextSection() {
-            const aboutSection = document.querySelector('.about');
+        scrollCue.addEventListener('click', (e) => {
+            e.preventDefault();
+            const aboutSection = document.getElementById('about');
             if (aboutSection) {
                 aboutSection.scrollIntoView({ behavior: 'smooth' });
             }
-        }
-        scrollCue.addEventListener('click', scrollToNextSection);
-        scrollCue.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                scrollToNextSection();
-            }
         });
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 150) {
+                scrollCue.style.opacity = '0';
+                scrollCue.style.pointerEvents = 'none';
+            } else {
+                scrollCue.style.opacity = '1';
+                scrollCue.style.pointerEvents = 'auto';
+            }
+        }, { passive: true });
     }
 
 });

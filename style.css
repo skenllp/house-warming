@@ -196,7 +196,7 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 600; letter-spac
 /* ==================================================== */
 .hero {
     position: relative;
-    padding: 40px 0 16px;
+    padding: 85px 0 95px;
     color: var(--text-dark);
     text-align: center;
     overflow: hidden;
@@ -204,8 +204,8 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 600; letter-spac
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
+    justify-content: center;
 }
 
 .hero-bg {
@@ -251,8 +251,7 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 600; letter-spac
     border: 1px solid rgba(212, 175, 55, 0.3);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
     max-width: 720px;
-    width: 100%;
-    margin: auto 0;
+    margin: 0 auto 40px;
 }
 
 .hero-eyebrow {
@@ -400,43 +399,72 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 600; letter-spac
 
 /* Scroll cue */
 .scroll-cue {
-    position: relative;
-    z-index: 10;
-    margin-top: 14px;
-    margin-bottom: 8px;
-    color: #f4efe2;
-    display: inline-flex;
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    color: #ffffff;
+    display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
-    font-size: 0.72rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    opacity: 0.9;
+    justify-content: center;
+    gap: 3px;
+    padding: 8px 22px;
+    background: rgba(4, 35, 24, 0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 175, 55, 0.6);
+    border-radius: 30px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(212, 175, 55, 0.35);
     cursor: pointer;
-    transition: var(--transition);
-    user-select: none;
-    padding: 6px 16px;
-    border-radius: 20px;
-    background: rgba(4, 35, 24, 0.45);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border: 1px solid rgba(212, 175, 55, 0.3);
+    text-decoration: none;
+    transition: opacity 0.4s ease, transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    animation: pulseGold 3s ease-in-out infinite;
 }
-.scroll-cue:hover, .scroll-cue:focus-visible {
-    opacity: 1;
+
+.scroll-cue:hover {
+    background: rgba(8, 59, 43, 0.95);
+    border-color: var(--accent-gold-light);
+    transform: translateX(-50%) translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7), 0 0 22px rgba(247, 212, 109, 0.5);
+}
+
+.scroll-cue-text {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
     color: var(--accent-gold-light);
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 14px rgba(212, 175, 55, 0.35);
-    transform: translateY(-2px);
-    outline: none;
+    font-weight: 700;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
+
+.chevron-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
 .scroll-cue .chevron {
-    width: 9px; height: 9px;
+    width: 8px;
+    height: 8px;
     border-right: 2px solid var(--accent-gold-light);
     border-bottom: 2px solid var(--accent-gold-light);
     transform: rotate(45deg);
-    animation: floatSlow 2s ease-in-out infinite;
+    animation: bounceChevron 1.8s ease-in-out infinite;
+}
+
+.scroll-cue .chevron-delay {
+    margin-top: -4px;
+    animation-delay: 0.3s;
+    opacity: 0.7;
+}
+
+@keyframes bounceChevron {
+    0%, 100% { transform: rotate(45deg) translate(0, 0); opacity: 0.4; }
+    50% { transform: rotate(45deg) translate(3px, 3px); opacity: 1; }
 }
 
 /* ==================================================== */
@@ -1353,14 +1381,10 @@ PREVIOUS DOOR OPENING ANIMATION STYLES (COMMENTED OUT PER REQUEST)
 @media (max-width: 768px) {
     html { font-size: 15px; }
     .container { padding: 0 16px; }
-    .hero {
-        padding: 28px 0 12px;
-        min-height: 100vh;
-        min-height: 100dvh;
-    }
+    .hero { padding: 75px 0 75px; min-height: 100vh; }
     .hero-content {
-        padding: 18px 14px;
-        margin: auto 0;
+        padding: 18px 12px;
+        margin: 0 auto 35px;
         max-width: 100%;
     }
     .hero-eyebrow { font-size: 0.78rem; letter-spacing: 3.5px; margin-bottom: 8px; }
@@ -1369,14 +1393,13 @@ PREVIOUS DOOR OPENING ANIMATION STYLES (COMMENTED OUT PER REQUEST)
     .hero-title-names .hero-amp { margin: 0 6px; }
     .hero-subtitle { font-size: 0.98rem; line-height: 1.55; margin: 12px auto 8px; }
     .hero-host-names { font-size: 1.25rem; }
-    .countdown-box { padding: 14px 10px; margin-top: 14px; max-width: 340px; }
-    .countdown-title { font-size: 0.68rem; letter-spacing: 1.8px; margin-bottom: 10px; }
-    .countdown-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; max-width: 320px; }
-    .countdown-item { padding: 8px 4px; }
-    .countdown-number { font-size: 1.45rem; }
-    .countdown-label { font-size: 0.6rem; letter-spacing: 0.8px; margin-top: 3px; }
-    .scroll-cue { margin-top: 10px; margin-bottom: 4px; font-size: 0.68rem; padding: 5px 14px; }
-    .audio-controller { bottom: 16px; left: 16px; width: 44px; height: 44px; padding: 8px; }
+    .countdown-box { padding: 16px 12px; margin-top: 18px; max-width: 320px; }
+    .countdown-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 280px; }
+    .countdown-item { padding: 10px 6px; }
+    .countdown-number { font-size: 1.6rem; }
+    .countdown-label { font-size: 0.65rem; letter-spacing: 0.8px; margin-top: 4px; }
+    .scroll-cue { bottom: 16px; padding: 6px 18px; }
+    .scroll-cue-text { font-size: 0.68rem; letter-spacing: 2px; }
     .about-card { padding: 38px 22px; }
     .owner-grid { grid-template-columns: 1fr; max-width: 320px; }
     .quote-container { padding: 30px 20px; }
@@ -1391,20 +1414,14 @@ PREVIOUS DOOR OPENING ANIMATION STYLES (COMMENTED OUT PER REQUEST)
 }
 
 @media (max-width: 480px) {
-    .container { padding: 0 12px; }
-    .hero { padding: 20px 0 10px; }
-    .hero-content { padding: 14px 10px; border-radius: 16px; }
-    .hero-eyebrow { font-size: 0.72rem; letter-spacing: 2.5px; margin-bottom: 6px; }
-    .hero-title-names { font-size: clamp(1.8rem, 6.8vw, 2.4rem); line-height: 1.25; }
-    .hero-subtitle { font-size: 0.92rem; line-height: 1.48; margin: 8px auto 6px; }
-    .ornament-divider { margin: 8px auto; }
-    .countdown-box { padding: 10px 6px; border-radius: 12px; max-width: 300px; margin-top: 10px; }
-    .countdown-title { font-size: 0.65rem; letter-spacing: 1.2px; margin-bottom: 8px; }
-    .countdown-grid { grid-template-columns: repeat(4, 1fr); gap: 4px; max-width: 280px; }
-    .countdown-item { padding: 6px 2px; border-radius: 6px; }
-    .countdown-number { font-size: 1.25rem; }
-    .countdown-label { font-size: 0.55rem; letter-spacing: 0.4px; margin-top: 2px; }
-    .scroll-cue { margin-top: 8px; margin-bottom: 2px; font-size: 0.62rem; padding: 4px 12px; }
+    .container { padding: 0 10px; }
+    .hero { padding: 65px 0 65px; }
+    .hero-content { padding: 14px 8px; border-radius: 14px; margin-bottom: 30px; }
+    .hero-title-names { font-size: clamp(1.85rem, 7vw, 2.5rem); line-height: 1.35; }
+    .countdown-box { padding: 12px 8px; border-radius: 12px; max-width: 280px; margin-top: 14px; }
+    .countdown-title { font-size: 0.72rem; letter-spacing: 1.5px; margin-bottom: 10px; }
+    .countdown-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; max-width: 260px; }
+    .countdown-item { padding: 8px 4px; border-radius: 8px; }
     .family-names { gap: 4px; }
     .family-lead { font-size: 1.25rem; }
     .family-subnames { font-size: 1.15rem; }
@@ -1412,32 +1429,17 @@ PREVIOUS DOOR OPENING ANIMATION STYLES (COMMENTED OUT PER REQUEST)
     .btn-call, .btn-whatsapp { width: 100%; justify-content: center; }
     .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
     .gallery-card.tall { grid-row: span 1; }
+    .scroll-cue { bottom: 12px; padding: 6px 14px; }
 }
 
-@media (max-width: 360px) {
-    .hero-title-names { font-size: 1.65rem; }
-    .countdown-grid { gap: 3px; }
-    .countdown-number { font-size: 1.1rem; }
-    .countdown-label { font-size: 0.5rem; }
-    .scroll-cue { font-size: 0.58rem; padding: 3px 10px; }
-}
-
-/* Short height viewports (landscape phones or compact screens) */
-@media (max-height: 680px) {
-    .hero { padding: 12px 0 6px; }
-    .hero-content { padding: 10px 8px; border-radius: 12px; }
-    .hero-eyebrow { font-size: 0.65rem; margin-bottom: 4px; letter-spacing: 2px; }
-    .hero-title-names { font-size: 1.6rem; line-height: 1.18; }
-    .hero-names-translit { font-size: 0.65rem; margin-top: 1px; }
-    .ornament-divider { margin: 4px auto; }
-    .hero-subtitle { font-size: 0.82rem; line-height: 1.35; margin: 4px auto; }
-    .countdown-box { margin-top: 6px; padding: 6px 4px; }
-    .countdown-title { font-size: 0.58rem; margin-bottom: 4px; }
-    .countdown-grid { grid-template-columns: repeat(4, 1fr); gap: 3px; }
-    .countdown-item { padding: 4px 2px; }
-    .countdown-number { font-size: 1.05rem; }
-    .countdown-label { font-size: 0.5rem; margin-top: 1px; }
-    .scroll-cue { margin-top: 4px; margin-bottom: 2px; font-size: 0.58rem; padding: 2px 8px; }
+@media (max-height: 720px) {
+    .hero { padding: 55px 0 60px; min-height: 100vh; }
+    .hero-content { padding: 14px 10px; margin-bottom: 25px; }
+    .hero-eyebrow { margin-bottom: 6px; font-size: 0.8rem; }
+    .hero-subtitle { margin: 10px auto 6px; font-size: 1rem; line-height: 1.5; }
+    .countdown-box { margin-top: 10px; padding: 10px 8px; }
+    .countdown-title { margin-bottom: 8px; }
+    .scroll-cue { bottom: 10px; padding: 5px 14px; }
 }
 
 /* Respect reduced motion preference */
