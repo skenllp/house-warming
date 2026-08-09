@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     playAudio();
 
     // ==========================================
-    // 0. HOUSE INTRO VIDEO & SMOOTH HERO REVEAL
+    // 0. HOUSE INTRO / SPLASH SCREEN REVEAL
     // ==========================================
     const openInvitationBtn = document.getElementById('open-invitation-btn');
     const introStartCard = document.getElementById('intro-start-card');
@@ -51,15 +51,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (introOverlay) {
         document.body.style.overflow = 'hidden';
-        let introEndedOrSkipped = false;
-        let videoStarted = false;
-        let safetyTimer = null;
+        let introFinished = false;
 
         function finishIntroAndMoveToHero() {
-            if (introEndedOrSkipped) return;
-            introEndedOrSkipped = true;
-
-            if (safetyTimer) clearTimeout(safetyTimer);
+            if (introFinished) return;
+            introFinished = true;
 
             document.body.style.overflow = '';
             introOverlay.classList.add('is-fading');
@@ -74,67 +70,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 try { introOverlay.remove(); } catch(e) {}
 
                 if (window.gsap) {
-                    gsap.from(".hero-bg img", { scale: 1.15, opacity: 0.3, duration: 1.4, ease: "power3.out" });
-                    gsap.from(".hero-content > *", { y: 60, opacity: 0, stagger: 0.15, duration: 1.2, ease: "power3.out" });
+                    gsap.from(".hero-bg img", { scale: 1.15, opacity: 0.3, duration: 1.2, ease: "power3.out" });
+                    gsap.from(".hero-content > *", { y: 40, opacity: 0, stagger: 0.12, duration: 1.0, ease: "power3.out" });
                 }
 
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-            }, 800);
+            }, 500);
 
             // Ensure background music keeps playing
             playAudio();
         }
 
-        function startVideoAndAudioSimultaneously() {
-            if (videoStarted) {
-                finishIntroAndMoveToHero();
-                return;
-            }
-            videoStarted = true;
-
-            if (introStartCard) {
-                introStartCard.classList.add('is-hidden');
-            }
-
-            if (skipIntroBtn) {
-                skipIntroBtn.style.display = 'block';
-            }
-
-            // Start background music immediately
-            playAudio();
-
-            // Safety fallback: if video doesn't end within 4.5 seconds, open hero automatically
-            safetyTimer = setTimeout(() => {
-                finishIntroAndMoveToHero();
-            }, 4500);
-
-            // Try playing video from start
-            if (introVideo) {
-                try {
-                    introVideo.currentTime = 0;
-                    const playPromise = introVideo.play();
-                    if (playPromise !== undefined) {
-                        playPromise.then(() => {
-                            // Video playing smoothly
-                        }).catch(err => {
-                            console.log("Video play blocked/failed, opening hero:", err);
-                            finishIntroAndMoveToHero();
-                        });
-                    }
-                } catch(e) {
-                    console.log("Video exception, opening hero:", e);
-                    finishIntroAndMoveToHero();
-                }
-            } else {
-                finishIntroAndMoveToHero();
-            }
-        }
-
         if (openInvitationBtn) {
             openInvitationBtn.addEventListener('click', (e) => {
+                e.preventDefault();
                 e.stopPropagation();
-                startVideoAndAudioSimultaneously();
+                finishIntroAndMoveToHero();
             });
+            openInvitationBtn.addEventListener('touchstart', (e) => {
+                e.stopPropagation();
+                finishIntroAndMoveToHero();
+            }, { passive: true });
         }
 
         if (skipIntroBtn) {
@@ -144,27 +100,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        if (introVideo) {
-            introVideo.muted = true;
-            introVideo.addEventListener('ended', finishIntroAndMoveToHero);
-            introVideo.addEventListener('error', () => {
-                console.log("Video error, opening hero");
-                finishIntroAndMoveToHero();
-            });
-            introVideo.addEventListener('stalled', () => {
-                console.log("Video stalled, opening hero");
-                finishIntroAndMoveToHero();
-            });
-        }
-
-        // Tapping overlay after video starts skips to hero section
+        // Tapping anywhere on overlay opens the invitation immediately
         introOverlay.addEventListener('click', () => {
-            if (!videoStarted) {
-                startVideoAndAudioSimultaneously();
-            } else {
-                finishIntroAndMoveToHero();
-            }
+            finishIntroAndMoveToHero();
         });
+        introOverlay.addEventListener('touchstart', () => {
+            finishIntroAndMoveToHero();
+        }, { passive: true });
     }
 
     // ==========================================
@@ -293,6 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ticking = true;
             }
         }, { passive: true });
+    }
+
     // ==========================================
     // 6. SCROLL CUE CLICK HANDLER
     // ==========================================
