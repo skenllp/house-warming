@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     playAudio();
 
     // ==========================================
-    // 0. HOUSE INTRO / SPLASH SCREEN REVEAL
+    // 0. HOUSE INTRO VIDEO & SMOOTH HERO REVEAL
     // ==========================================
     const openInvitationBtn = document.getElementById('open-invitation-btn');
     const introStartCard = document.getElementById('intro-start-card');
@@ -52,6 +52,43 @@ document.addEventListener('DOMContentLoaded', () => {
     if (introOverlay) {
         document.body.style.overflow = 'hidden';
         let introFinished = false;
+        let videoStarted = false;
+
+        function startVideoAndAudio() {
+            if (videoStarted) return;
+            videoStarted = true;
+
+            // Hide the initial start card card
+            if (introStartCard) {
+                introStartCard.classList.add('is-hidden');
+            }
+
+            // Show skip intro button so user can skip during video playback
+            if (skipIntroBtn) {
+                skipIntroBtn.style.display = 'block';
+            }
+
+            // Simultaneously start background music
+            playAudio();
+
+            // Play house intro video from start
+            if (introVideo) {
+                try {
+                    introVideo.currentTime = 0;
+                    const playPromise = introVideo.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(err => {
+                            console.log("Video play failed:", err);
+                            finishIntroAndMoveToHero();
+                        });
+                    }
+                } catch(e) {
+                    finishIntroAndMoveToHero();
+                }
+            } else {
+                finishIntroAndMoveToHero();
+            }
+        }
 
         function finishIntroAndMoveToHero() {
             if (introFinished) return;
@@ -75,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-            }, 500);
+            }, 600);
 
             // Ensure background music keeps playing
             playAudio();
@@ -85,28 +122,36 @@ document.addEventListener('DOMContentLoaded', () => {
             openInvitationBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                finishIntroAndMoveToHero();
+                startVideoAndAudio();
             });
             openInvitationBtn.addEventListener('touchstart', (e) => {
                 e.stopPropagation();
-                finishIntroAndMoveToHero();
+                startVideoAndAudio();
             }, { passive: true });
         }
 
         if (skipIntroBtn) {
             skipIntroBtn.addEventListener('click', (e) => {
+                e.preventDefault();
                 e.stopPropagation();
                 finishIntroAndMoveToHero();
             });
         }
 
-        // Tapping anywhere on overlay opens the invitation immediately
+        // When intro video ends or errors, seamlessly transition to hero section
+        if (introVideo) {
+            introVideo.addEventListener('ended', finishIntroAndMoveToHero);
+            introVideo.addEventListener('error', finishIntroAndMoveToHero);
+        }
+
+        // Tapping overlay after video started allows skipping to hero; before video starts, plays video
         introOverlay.addEventListener('click', () => {
-            finishIntroAndMoveToHero();
+            if (!videoStarted) {
+                startVideoAndAudio();
+            } else {
+                finishIntroAndMoveToHero();
+            }
         });
-        introOverlay.addEventListener('touchstart', () => {
-            finishIntroAndMoveToHero();
-        }, { passive: true });
     }
 
     // ==========================================
