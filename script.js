@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     const openInvitationBtn = document.getElementById('open-invitation-btn');
     const introStartCard = document.getElementById('intro-start-card');
-    const skipIntroBtn = document.getElementById('skip-intro-btn');
 
     if (introOverlay) {
         document.body.style.overflow = 'hidden';
@@ -78,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }, 500);
 
-            // Ensure background music plays after intro video finishes or is skipped
+            // Ensure background music plays after intro video finishes
             playAudio();
         }
 
@@ -86,20 +85,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (videoStarted) return;
             videoStarted = true;
 
-            // Pause background music while intro video plays
-            pauseAudio();
+            // Start background music immediately when clicking Open Invitation
+            playAudio();
 
-            // Hide the initial invitation start card & show skip intro button
+            // Hide the initial invitation start card
             if (introStartCard) {
                 introStartCard.classList.add('is-hidden');
-            }
-            if (skipIntroBtn) {
-                skipIntroBtn.style.display = 'block';
             }
 
             if (introVideo) {
                 introVideo.currentTime = 0;
-                introVideo.muted = false;
+                introVideo.muted = true; // Video muted so background audio plays seamlessly
 
                 introVideo.addEventListener('ended', finishIntroAndMoveToHero, { once: true });
                 introVideo.addEventListener('error', finishIntroAndMoveToHero, { once: true });
@@ -107,12 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const playPromise = introVideo.play();
                 if (playPromise !== undefined) {
                     playPromise.catch(err => {
-                        console.log("Video playback with sound failed, trying muted fallback:", err);
-                        introVideo.muted = true;
-                        introVideo.play().catch(e => {
-                            console.log("Video playback failed entirely:", e);
-                            finishIntroAndMoveToHero();
-                        });
+                        console.log("Video playback failed:", err);
+                        finishIntroAndMoveToHero();
                     });
                 }
             } else {
@@ -125,13 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
                 e.stopPropagation();
                 startIntroVideo();
-            });
-        }
-
-        if (skipIntroBtn) {
-            skipIntroBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                finishIntroAndMoveToHero();
             });
         }
     }
