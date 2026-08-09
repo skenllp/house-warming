@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (introOverlay) {
         document.body.style.overflow = 'hidden';
         let introFinished = false;
+        let videoStarted = false;
 
         function finishIntroAndMoveToHero() {
             if (introFinished) return;
@@ -77,20 +78,54 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }, 500);
 
-            // Ensure background music keeps playing
+            // Ensure background music plays after intro video finishes or is skipped
             playAudio();
+        }
+
+        function startIntroVideo() {
+            if (videoStarted) return;
+            videoStarted = true;
+
+            // Pause background music while intro video plays
+            pauseAudio();
+
+            // Hide the initial invitation start card & show skip intro button
+            if (introStartCard) {
+                introStartCard.classList.add('is-hidden');
+            }
+            if (skipIntroBtn) {
+                skipIntroBtn.style.display = 'block';
+            }
+
+            if (introVideo) {
+                introVideo.currentTime = 0;
+                introVideo.muted = false;
+
+                introVideo.addEventListener('ended', finishIntroAndMoveToHero, { once: true });
+                introVideo.addEventListener('error', finishIntroAndMoveToHero, { once: true });
+
+                const playPromise = introVideo.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(err => {
+                        console.log("Video playback with sound failed, trying muted fallback:", err);
+                        introVideo.muted = true;
+                        introVideo.play().catch(e => {
+                            console.log("Video playback failed entirely:", e);
+                            finishIntroAndMoveToHero();
+                        });
+                    });
+                }
+            } else {
+                finishIntroAndMoveToHero();
+            }
         }
 
         if (openInvitationBtn) {
             openInvitationBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                finishIntroAndMoveToHero();
+                startIntroVideo();
             });
-            openInvitationBtn.addEventListener('touchstart', (e) => {
-                e.stopPropagation();
-                finishIntroAndMoveToHero();
-            }, { passive: true });
         }
 
         if (skipIntroBtn) {
@@ -99,14 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 finishIntroAndMoveToHero();
             });
         }
-
-        // Tapping anywhere on overlay opens the invitation immediately
-        introOverlay.addEventListener('click', () => {
-            finishIntroAndMoveToHero();
-        });
-        introOverlay.addEventListener('touchstart', () => {
-            finishIntroAndMoveToHero();
-        }, { passive: true });
     }
 
     // ==========================================
