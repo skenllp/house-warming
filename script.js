@@ -47,42 +47,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     const openInvitationBtn = document.getElementById('open-invitation-btn');
     const introStartCard = document.getElementById('intro-start-card');
+    const skipIntroBtn = document.getElementById('skip-intro-btn');
 
     if (introOverlay) {
         document.body.style.overflow = 'hidden';
         let introEndedOrSkipped = false;
         let videoStarted = false;
-
-        function startVideoAndAudioSimultaneously() {
-            if (videoStarted) return;
-            videoStarted = true;
-
-            if (introStartCard) {
-                introStartCard.classList.add('is-hidden');
-            }
-
-            // Simultaneously start background music
-            playAudio();
-
-            // Play video from start
-            if (introVideo) {
-                try {
-                    introVideo.currentTime = 0;
-                    introVideo.play().catch(err => console.log("Video play:", err));
-                } catch(e) {}
-            }
-        }
-
-        if (openInvitationBtn) {
-            openInvitationBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                startVideoAndAudioSimultaneously();
-            });
-        }
+        let safetyTimer = null;
 
         function finishIntroAndMoveToHero() {
             if (introEndedOrSkipped) return;
             introEndedOrSkipped = true;
+
+            if (safetyTimer) clearTimeout(safetyTimer);
 
             document.body.style.overflow = '';
             introOverlay.classList.add('is-fading');
@@ -94,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Animate transition to hero contents smoothly with GSAP
             setTimeout(() => {
                 introOverlay.classList.add('is-done');
-                introOverlay.remove();
+                try { introOverlay.remove(); } catch(e) {}
 
                 if (window.gsap) {
                     gsap.from(".hero-bg img", { scale: 1.15, opacity: 0.3, duration: 1.4, ease: "power3.out" });
@@ -108,13 +85,79 @@ document.addEventListener('DOMContentLoaded', () => {
             playAudio();
         }
 
+        function startVideoAndAudioSimultaneously() {
+            if (videoStarted) {
+                finishIntroAndMoveToHero();
+                return;
+            }
+            videoStarted = true;
+
+            if (introStartCard) {
+                introStartCard.classList.add('is-hidden');
+            }
+
+            if (skipIntroBtn) {
+                skipIntroBtn.style.display = 'block';
+            }
+
+            // Start background music immediately
+            playAudio();
+
+            // Safety fallback: if video doesn't end within 4.5 seconds, open hero automatically
+            safetyTimer = setTimeout(() => {
+                finishIntroAndMoveToHero();
+            }, 4500);
+
+            // Try playing video from start
+            if (introVideo) {
+                try {
+                    introVideo.currentTime = 0;
+                    const playPromise = introVideo.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            // Video playing smoothly
+                        }).catch(err => {
+                            console.log("Video play blocked/failed, opening hero:", err);
+                            finishIntroAndMoveToHero();
+                        });
+                    }
+                } catch(e) {
+                    console.log("Video exception, opening hero:", e);
+                    finishIntroAndMoveToHero();
+                }
+            } else {
+                finishIntroAndMoveToHero();
+            }
+        }
+
+        if (openInvitationBtn) {
+            openInvitationBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                startVideoAndAudioSimultaneously();
+            });
+        }
+
+        if (skipIntroBtn) {
+            skipIntroBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                finishIntroAndMoveToHero();
+            });
+        }
+
         if (introVideo) {
             introVideo.muted = true;
             introVideo.addEventListener('ended', finishIntroAndMoveToHero);
-            introVideo.addEventListener('error', finishIntroAndMoveToHero);
+            introVideo.addEventListener('error', () => {
+                console.log("Video error, opening hero");
+                finishIntroAndMoveToHero();
+            });
+            introVideo.addEventListener('stalled', () => {
+                console.log("Video stalled, opening hero");
+                finishIntroAndMoveToHero();
+            });
         }
 
-        // Tapping overlay after video starts skips to hero section; before start, triggers play
+        // Tapping overlay after video starts skips to hero section
         introOverlay.addEventListener('click', () => {
             if (!videoStarted) {
                 startVideoAndAudioSimultaneously();
