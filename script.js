@@ -57,14 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (videoStarted) return;
             videoStarted = true;
 
-            // Hide the initial start card card
+            // Hide the initial start card
             if (introStartCard) {
                 introStartCard.classList.add('is-hidden');
-            }
-
-            // Show skip intro button so user can skip during video playback
-            if (skipIntroBtn) {
-                skipIntroBtn.style.display = 'block';
             }
 
             // Simultaneously start background music
@@ -74,14 +69,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (introVideo) {
                 try {
                     introVideo.currentTime = 0;
+                    introVideo.muted = true;
+
+                    introVideo.addEventListener('ended', finishIntroAndMoveToHero, { once: true });
+                    introVideo.addEventListener('error', finishIntroAndMoveToHero, { once: true });
+
                     const playPromise = introVideo.play();
                     if (playPromise !== undefined) {
                         playPromise.catch(err => {
-                            console.log("Video play failed:", err);
+                            console.warn("Video play failed:", err);
                             finishIntroAndMoveToHero();
                         });
                     }
                 } catch(e) {
+                    console.warn("Video play exception:", e);
                     finishIntroAndMoveToHero();
                 }
             } else {
@@ -117,37 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
             playAudio();
         }
 
-        function startIntroVideo() {
-            if (videoStarted) return;
-            videoStarted = true;
-
-            // Start background music immediately when clicking Open Invitation
-            playAudio();
-
-            // Hide the initial invitation start card
-            if (introStartCard) {
-                introStartCard.classList.add('is-hidden');
-            }
-
-            if (introVideo) {
-                introVideo.currentTime = 0;
-                introVideo.muted = true; // Video muted so background audio plays seamlessly
-
-                introVideo.addEventListener('ended', finishIntroAndMoveToHero, { once: true });
-                introVideo.addEventListener('error', finishIntroAndMoveToHero, { once: true });
-
-                const playPromise = introVideo.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(err => {
-                        console.log("Video playback failed:", err);
-                        finishIntroAndMoveToHero();
-                    });
-                }
-            } else {
-                finishIntroAndMoveToHero();
-            }
-        }
-
         if (openInvitationBtn) {
             openInvitationBtn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -160,22 +130,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }, { passive: true });
         }
 
-        if (skipIntroBtn) {
-            skipIntroBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                finishIntroAndMoveToHero();
-            });
-        }
-
-        // When intro video ends or errors, seamlessly transition to hero section
-        if (introVideo) {
-            introVideo.addEventListener('ended', finishIntroAndMoveToHero);
-            introVideo.addEventListener('error', finishIntroAndMoveToHero);
-        }
-
         // Tapping overlay after video started allows skipping to hero; before video starts, plays video
-        introOverlay.addEventListener('click', () => {
+        introOverlay.addEventListener('click', (e) => {
+            if (e.target.closest('#open-invitation-btn')) {
+                return;
+            }
             if (!videoStarted) {
                 startVideoAndAudio();
             } else {
