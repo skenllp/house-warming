@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // 6. SCROLL CUE CLICK & FADE OUT ON SCROLL
+    // 6. SCROLL CUE CLICK
     // ==========================================
     const scrollCue = document.getElementById('scrollCue');
     if (scrollCue) {
@@ -286,16 +286,5 @@ document.addEventListener('DOMContentLoaded', () => {
                 aboutSection.scrollIntoView({ behavior: 'smooth' });
             }
         });
-
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 150) {
-                scrollCue.style.opacity = '0';
-                scrollCue.style.pointerEvents = 'none';
-            } else {
-                scrollCue.style.opacity = '1';
-                scrollCue.style.pointerEvents = 'auto';
-            }
-        }, { passive: true });
     }
-
 });
