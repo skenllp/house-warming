@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     const openInvitationBtn = document.getElementById('open-invitation-btn');
     const introStartCard = document.getElementById('intro-start-card');
-    const skipIntroBtn = document.getElementById('skip-intro-btn');
 
     if (introOverlay) {
         document.body.style.overflow = 'hidden';
@@ -114,8 +113,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }, 600);
 
-            // Ensure background music keeps playing
+            // Ensure background music plays after intro video finishes
             playAudio();
+        }
+
+        function startIntroVideo() {
+            if (videoStarted) return;
+            videoStarted = true;
+
+            // Start background music immediately when clicking Open Invitation
+            playAudio();
+
+            // Hide the initial invitation start card
+            if (introStartCard) {
+                introStartCard.classList.add('is-hidden');
+            }
+
+            if (introVideo) {
+                introVideo.currentTime = 0;
+                introVideo.muted = true; // Video muted so background audio plays seamlessly
+
+                introVideo.addEventListener('ended', finishIntroAndMoveToHero, { once: true });
+                introVideo.addEventListener('error', finishIntroAndMoveToHero, { once: true });
+
+                const playPromise = introVideo.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(err => {
+                        console.log("Video playback failed:", err);
+                        finishIntroAndMoveToHero();
+                    });
+                }
+            } else {
+                finishIntroAndMoveToHero();
+            }
         }
 
         if (openInvitationBtn) {
