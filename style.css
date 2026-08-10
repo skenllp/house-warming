@@ -400,8 +400,8 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 600; letter-spac
 /* Scroll cue */
 .scroll-cue {
     position: absolute;
-    bottom: 80px;
-    bottom: calc(80px + env(safe-area-inset-bottom));
+    bottom: 100px;
+    bottom: calc(100px + env(safe-area-inset-bottom));
     left: 50%;
     transform: translateX(-50%);
     z-index: 20;
@@ -1399,7 +1399,7 @@ PREVIOUS DOOR OPENING ANIMATION STYLES (COMMENTED OUT PER REQUEST)
     .countdown-item { padding: 10px 6px; }
     .countdown-number { font-size: 1.6rem; }
     .countdown-label { font-size: 0.65rem; letter-spacing: 0.8px; margin-top: 4px; }
-    .scroll-cue { bottom: 60px; bottom: calc(60px + env(safe-area-inset-bottom)); padding: 6px 18px; }
+    .scroll-cue { bottom: 80px; bottom: calc(80px + env(safe-area-inset-bottom)); padding: 6px 18px; }
     .scroll-cue-text { font-size: 0.68rem; letter-spacing: 2px; }
     .about-card { padding: 38px 22px; }
     .owner-grid { grid-template-columns: 1fr; max-width: 320px; }
@@ -1430,7 +1430,7 @@ PREVIOUS DOOR OPENING ANIMATION STYLES (COMMENTED OUT PER REQUEST)
     .btn-call, .btn-whatsapp { width: 100%; justify-content: center; }
     .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
     .gallery-card.tall { grid-row: span 1; }
-    .scroll-cue { bottom: 50px; bottom: calc(50px + env(safe-area-inset-bottom)); padding: 6px 14px; }
+    .scroll-cue { bottom: 70px; bottom: calc(70px + env(safe-area-inset-bottom)); padding: 6px 14px; }
 }
 
 @media (max-height: 720px) {
@@ -1440,7 +1440,7 @@ PREVIOUS DOOR OPENING ANIMATION STYLES (COMMENTED OUT PER REQUEST)
     .hero-subtitle { margin: 10px auto 6px; font-size: 1rem; line-height: 1.5; }
     .countdown-box { margin-top: 10px; padding: 10px 8px; }
     .countdown-title { margin-bottom: 8px; }
-    .scroll-cue { bottom: 45px; bottom: calc(45px + env(safe-area-inset-bottom)); padding: 5px 14px; }
+    .scroll-cue { bottom: 65px; bottom: calc(65px + env(safe-area-inset-bottom)); padding: 5px 14px; }
 }
 
 /* Respect reduced motion preference */
