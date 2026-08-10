@@ -52,10 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = 'hidden';
         let introFinished = false;
         let videoStarted = false;
+        let videoStartTime = 0;
 
         function startVideoAndAudio() {
             if (videoStarted) return;
             videoStarted = true;
+            videoStartTime = Date.now();
 
             // Hide the initial start card
             if (introStartCard) {
@@ -124,15 +126,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.stopPropagation();
                 startVideoAndAudio();
             });
-            openInvitationBtn.addEventListener('touchstart', (e) => {
-                e.stopPropagation();
-                startVideoAndAudio();
-            }, { passive: true });
         }
 
         // Tapping overlay after video started allows skipping to hero; before video starts, plays video
         introOverlay.addEventListener('click', (e) => {
+            // Ignore ghost clicks immediately after video starts (within 600ms)
+            if (videoStarted && (Date.now() - videoStartTime < 600)) {
+                return;
+            }
             if (e.target.closest('#open-invitation-btn')) {
+                startVideoAndAudio();
                 return;
             }
             if (!videoStarted) {
